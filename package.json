@@ -1,0 +1,27 @@
+{
+  "name": "liri",
+  "version": "1.0.0",
+  "description": "Node Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agunforhire/liri.git"
+  },
+  "keywords": [],
+  "author": "James D Wilcox",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/agunforhire/liri/issues"
+  },
+  "homepage": "https://github.com/agunforhire/liri#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "chalk": "^2.4.1",
+    "dotenv": "^6.1.0",
+    "moment": "^2.22.2",
+    "node-spotify-api": "^1.0.7"
+  }
+}
