@@ -2,11 +2,6 @@ var fs = require("fs");
 var axios = require("axios");
 var inquirer = require("inquirer");
 
-//Liri takes the following arguments
-// * spotify-this-song
-// * movie-this
-
-//these add other programs to this one
 require("dotenv").config();
 let dataKeys = require("./keys.js");
 var fs = require('fs');
@@ -20,13 +15,13 @@ let divider = "================= ******************* ==================";
 
 // Function that writes all the data from output to the logfile
 function writeToLog(data) {
-    fs.appendFile("log.txt", '\r\n\r\n', function(err) {
+    fs.appendFile("log.txt", '\r\n\r\n', function (err) {
         if (err) {
             return console.log(err);
         }
     });
 
-    fs.appendFile("log.txt", (data), function(err) {
+    fs.appendFile("log.txt", (data), function (err) {
         if (err) {
             return console.log(err);
         }
@@ -36,36 +31,36 @@ function writeToLog(data) {
 
 function getSpotify(songName) {
     let spotify = new Spotify(dataKeys.spotify);
-    
+
     if (!songName) {
         songName = "Bang a gong (Get it on)";
     }
-    spotify.search({ type: 'track', query: songName }, function(err, data) {
+    spotify.search({ type: 'track', query: songName }, function (err, data) {
         if (err) {
             console.log('Error occurred: ' + err);
             return;
         } else {
             var output = [
-                "Song Name: "+ "'" + songName.toUpperCase() + "'",
+                "Song Name: " + "'" + songName.toUpperCase() + "'",
                 "Album Name: " + data.tracks.items[0].album.name,
                 "Artist Name: " + data.tracks.items[0].album.artists[0].name,
                 "URL: " + data.tracks.items[0].album.external_urls.spotify
             ].join(space);
-            console.log(divider, space, output, space, divider);
+            console.log(divider, space, output, space + divider);
             writeToLog(output);
         }
     });
 
 }
 
-let getMovie = function(movieName) {
+let getMovie = function (movieName) {
 
     if (!movieName) {
         movieName = "Mac and Me";
     }
     let urlHit = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=630c703e";
 
-    request(urlHit, function(err, res, body) {
+    request(urlHit, function (err, res, body) {
         if (err) {
             console.log('Error occurred: ' + err);
             return;
@@ -73,84 +68,98 @@ let getMovie = function(movieName) {
             let jsonData = JSON.parse(body);
             output = [
                 'Title: ' + jsonData.Title,
-                 'Year: ' + jsonData.Year,
-                 'Rated: ' + jsonData.Rated,
-                 'IMDB Rating: ' + jsonData.imdbRating,
-                 'Country: ' + jsonData.Country,
-                 'Language: ' + jsonData.Language,
-                 'Plot: ' + jsonData.Plot,
-                 'Actors: ' + jsonData.Actors,
-                 'Tomato Rating: ' + jsonData.Ratings[1].Value,
-                 'IMDb Rating: ' + jsonData.imdbRating
-                ].join(space);
-
-            console.log(divider, space, output, space, divider);
+                'Year: ' + jsonData.Year,
+                'Rated: ' + jsonData.Rated,
+                'IMDB Rating: ' + jsonData.imdbRating,
+                'Country: ' + jsonData.Country,
+                'Language: ' + jsonData.Language,
+                'Plot: ' + jsonData.Plot,
+                'Actors: ' + jsonData.Actors,
+                'Tomato Rating: ' + jsonData.Ratings[1].Value,
+                'IMDb Rating: ' + jsonData.imdbRating
+            ].join(space);
+            // console.log(jsonData);
+            console.log(divider, space, output, space + divider);
             writeToLog(divider, output);
         }
     });
 };
 
-let getConcert = function(concert) {
+let getConcert = function (concert) {
     if (!concert) {
         concert = "Melvins"
     }
     let url = "https://rest.bandsintown.com/artists/" + concert + "/events?app_id=codingbootcamp";
-    request(url, function(err, res, body) {
-    if (err)
-    {
-     console.log('An Error Occurred!',err);
-     return;
-    }
-
-    else {
-        let jsonData = JSON.parse(body);
-        console.log(jsonData);
-
-        for (var i = 0; i < jsonData.length; i++){
-            output = [
-                "Lineup: " + jsonData[i].lineup[0],
-                "Date: " + jsonData[i].datetime,
-                "Venue: " + jsonData[i].venue.name,
-                "City: " + jsonData[i].venue.city,
-                "State: " + jsonData[i].venue.region
-            ].join(space);
-            console.log(divider, space, output, space + divider);
-            writeToLog(divider, output);
+    request(url, function (err, res, body) {
+        if (err) {
+            console.log('An Error Occurred!', err);
+            return;
         }
-    }})};
 
-    
+        else {
+            let jsonData = JSON.parse(body);
+            // console.log(jsonData);
+
+            for (var i = 0; i < jsonData.length; i++) {
+                output = [
+                    "Lineup: " + jsonData[i].lineup[0],
+                    "Date: " + jsonData[i].datetime,
+                    "Venue: " + jsonData[i].venue.name,
+                    "City: " + jsonData[i].venue.city,
+                    "State: " + jsonData[i].venue.region
+                ].join(space);
+                console.log(divider, space, output, space + divider);
+                writeToLog(output);
+            }
+        }
+    })
+};
+
+
+function doWhatItSays() {
+    fs.readFile("random.txt", "utf8", function (error, data) {
+        getMeSpotify(data);
+    });
+}
 
 let questions = [{
-        type: 'list',
-        name: 'programs',
-        message: 'What would you like to do?',
-        choices: ['Spotify', 'Movie', 'Concert']
-    },
-    {
-        type: 'input',
-        name: 'movieChoice',
-        message: 'What\'s the name of the movie you would like?',
-        when: function(answers) {
-            return answers.programs == 'Movie';
-        }
-    },
-    {
-        type: 'input',
-        name: 'songChoice',
-        message: 'What\'s the name of the song you would like?',
-        when: function(answers) {
-            return answers.programs == 'Spotify';
-        }
-    },
-    {
-        type: 'input',
-        name: 'concertChoice',
-        message: 'What artist or band are you looking for?',
-        when: function(answers){
-            return answers.programs == 'Concert';
-        }
+    type: 'list',
+    name: 'programs',
+    message: 'What would you like to do?',
+    choices: ['Spotify', 'Movie', 'Concert', 'Do What It Says']
+},
+{
+    type: 'input',
+    name: 'movieChoice',
+    message: 'What\'s the name of the movie you would like?',
+    when: function (answers) {
+        return answers.programs == 'Movie';
     }
+},
+{
+    type: 'input',
+    name: 'songChoice',
+    message: 'What\'s the name of the song you would like?',
+    when: function (answers) {
+        return answers.programs == 'Spotify';
+    }
+},
+{
+    type: 'input',
+    name: 'concertChoice',
+    message: 'What artist or band are you looking for?',
+    when: function (answers) {
+        return answers.programs == 'Concert';
+    }
+},
+{
+    type: 'input',
+    name: 'doWhatItSays',
+    Message: 'Press Enter to read Random.txt',
+    when: function (answers) {
+        return answers.programs == 'Do what it says'
+    }
+},
 ];
 
 inquirer
@@ -167,7 +176,10 @@ inquirer
             case 'Concert':
                 getConcert(answers.concertChoice);
                 break;
+            case 'Do what it says':
+                doWhatItSays();
+                break;
             default:
                 console.log('I\'m sorry Dave, but I can\'t do that.');
         }
-});
+    });
