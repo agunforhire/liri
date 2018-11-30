@@ -13,8 +13,8 @@ Once LIRI loads, use your arrow keys to choose which option you would like to se
 Each option will accept a text input, make the appropriate search and display it for you.
 
 ![Songs](https://github.com/agunforhire/liri/tree/master/Images/3-Spotify.png)
-![Movies](https://github.com/agunforhire/liri/tree/master/Images/4 - Movies.png)
-![Concerts](https://github.com/agunforhire/liri/tree/master/Images/5 - Concert.png)
+![Movies](https://github.com/agunforhire/liri/tree/master/Images/4%20-%20Movies.png)
+![Concerts](https://github.com/agunforhire/liri/tree/master/Images/5%20-%20Concert.png)
 
 Check the log.txt file for your search history.
 
