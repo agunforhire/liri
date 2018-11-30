@@ -4,7 +4,7 @@ To start, clone and use NPM Install to get the dependencies
 
 Navigate to the directory and start the application with Node
 
-![Image 1](./Images/1.png)
+![Image 1](./Images/1.PNG)
 
 Once LIRI loads, use your arrow keys to choose which option you would like to search for
 
