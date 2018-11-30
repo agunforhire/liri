@@ -117,8 +117,12 @@ let getConcert = function (concert) {
 
 
 function doWhatItSays() {
-    fs.readFile("random.txt", "utf8", function (error, data) {
-        getMeSpotify(data);
+    fs.readFile("random.txt", "utf8", function (err, data) {
+        getSpotify(data);
+    if (err){
+        console.log('Something went wrong!', err)
+        return writeToLog(err);
+    }
     });
 }
 
@@ -157,9 +161,9 @@ let questions = [{
     name: 'doWhatItSays',
     Message: 'Press Enter to read Random.txt',
     when: function (answers) {
-        return answers.programs == 'Do what it says'
+        return answers.programs == 'doWhatItSays'
     }
-},
+}
 ];
 
 inquirer
@@ -176,10 +180,11 @@ inquirer
             case 'Concert':
                 getConcert(answers.concertChoice);
                 break;
-            case 'Do what it says':
+            case 'doWhatItSays':
                 doWhatItSays();
                 break;
             default:
-                console.log('I\'m sorry Dave, but I can\'t do that.');
+                doWhatItSays();
+                // console.log('I\'m sorry Dave, but I can\'t do that.');
         }
     });
