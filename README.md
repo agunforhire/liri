@@ -18,4 +18,4 @@ Each option will accept a text input, make the appropriate search and display it
 
 Check the log.txt file for your search history.
 
-##Enjoy!
+Enjoy!
